@@ -5,3 +5,17 @@ logs/
 .env.local
 dist/
 build/
+
+# Monorepo specific
+backend/.env
+frontend/.env
+backend/node_modules/
+frontend/node_modules/
+
+# IDE / Editors
+.vscode/
+.idea/
+
+# System Files
+.DS_Store
+Thumbs.db
