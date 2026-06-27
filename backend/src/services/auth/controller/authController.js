@@ -31,6 +31,8 @@ const onboardSuperAdmin = async (req, res) => {
                 config.cookie.secure,
             maxAge:
                 config.cookie.expiresIn,
+            sameSite:
+                config.cookie.secure ? "none" : "lax",
         }
         );
 
@@ -134,6 +136,9 @@ const loginUser = async (req, res) => {
 
                 maxAge:
                     config.cookie.expiresIn,
+
+                sameSite:
+                    config.cookie.secure ? "none" : "lax",
             }
         );
 
@@ -204,7 +209,11 @@ const logoutUser = async (req, res) => {
     try {
 
         // Cookie remove karo
-        res.clearCookie("authToken");
+        res.clearCookie("authToken", {
+            httpOnly: config.cookie.httpOnly,
+            secure: config.cookie.secure,
+            sameSite: config.cookie.secure ? "none" : "lax",
+        });
 
         // Response
         return res.status(200).json({

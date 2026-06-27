@@ -3,6 +3,7 @@ import { useState } from "react";
 import { clearSession,  } from "@/lib/auth";
 import { RoleBadge } from "./Badge";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { authAPI } from "@/lib/api";
 
 
 
@@ -28,7 +29,7 @@ export function PortalHeader({
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      await authAPI.logout();
     } catch (_) {
       // ignore network errors – still clear local session
     }
