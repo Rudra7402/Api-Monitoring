@@ -60,9 +60,9 @@ app.use(cors({
         const allowedFrontend = process.env.FRONTEND_URL;
 
         if (
-            origin.startsWith('http://localhost:') || 
+            origin.startsWith('http://localhost:') ||
             origin.startsWith('http://127.0.0.1:') ||
-            origin === 'https://api-monitoring-silk.vercel.app' ||
+            origin === 'https://api-monitoring-silk.vercel.app/api' ||
             (allowedFrontend && origin === allowedFrontend)
         ) {
             return callback(null, true);
