@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PageTitle, Section } from "@/components/Section";
 import { Modal } from "@/components/Modal";
 import { Pill, RoleBadge } from "@/components/Badge";
-import { authAPI, clientAPI } from "@/lib/api";
+import { authAPI, clientAPI, BASE_URL } from "@/lib/api";
 
 
 export const Route = createFileRoute("/super/users")({
@@ -175,7 +175,7 @@ function PlatformUsersPage() {
               const clientId = role !== "super_admin" ? String(fd.get("clientId") || "") : undefined;
 
               try {
-                const response = await fetch("http://localhost:5000/api/auth/register", {
+                const response = await fetch(`${BASE_URL}/auth/register`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   credentials: "include",
