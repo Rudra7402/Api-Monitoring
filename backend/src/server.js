@@ -55,11 +55,16 @@ app.use(helmet());
  */
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps, curl, or server-side loads)
         if (!origin) return callback(null, true);
 
-        // Allow any localhost origin (e.g. localhost:5173, localhost:8080)
-        if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+        const allowedFrontend = process.env.FRONTEND_URL;
+
+        if (
+            origin.startsWith('http://localhost:') || 
+            origin.startsWith('http://127.0.0.1:') ||
+            origin === 'https://api-monitoring-silk.vercel.app' ||
+            (allowedFrontend && origin === allowedFrontend)
+        ) {
             return callback(null, true);
         }
 
