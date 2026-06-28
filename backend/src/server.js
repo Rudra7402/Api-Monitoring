@@ -39,6 +39,8 @@ const app = express();
  */
 
 
+
+app.set('trust proxy', 1);
 /**
  * Helmet middleware
  * Adds security-related HTTP headers
