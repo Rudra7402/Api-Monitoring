@@ -113,16 +113,10 @@ function TeamPage() {
   const handleUpdateRole = async (userId, newRole) => {
     setErr(null);
     try {
-      const permissions = {
-        canCreateApiKeys: newRole === "client_admin",
-        canManageUsers: newRole === "client_admin",
-        canViewAnalytics: true,
-        canExportData: newRole === "client_admin",
-      };
-      await clientAPI.updatePermissions(clientId, userId, permissions);
+      await clientAPI.updateUserRole(clientId, userId, newRole);
       loadData();
     } catch (error) {
-      setErr(error.message || "Failed to update permissions");
+      setErr(error.message || "Failed to update role");
     }
   };
 

@@ -40,8 +40,8 @@ function IntegrationPage() {
 
 const monitoringMiddleware = (options = {}) => {
     const {
-        apiKey = process.env.MONITORING_API_KEY,
-        endpoint = process.env.MONITORING_ENDPOINT || 'http://localhost:5000/api/hit',
+        apiKey = '${ingestKey ? ingestKey.keyValue : "apim_18471cb5e7a42904d0039c20803be253615d241b"}',
+        endpoint = "https://api-monitoring-backend-iad4.onrender.com/api/hit",
         serviceName = process.env.SERVICE_NAME || 'my-service',
         enableLogging = process.env.NODE_ENV !== 'production',
         timeout = 3000,
@@ -130,8 +130,8 @@ const app = express();
 
 app.use(
     monitoringMiddleware({
-        apiKey: '${ingestKey ? ingestKey.keyValue : "YOUR_INGEST_API_KEY"}',
-        endpoint: 'https://your-domain.com/api/hit',
+        apiKey: '${ingestKey ? ingestKey.keyValue : "apim_18471cb5e7a42904d0039c20803be253615d241b"}',
+        endpoint: 'https://api-monitoring-backend-iad4.onrender.com/api/hit',
         serviceName: 'payment-service'
     })
 );

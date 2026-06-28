@@ -118,12 +118,12 @@ function ClientsPage() {
   );
 }
 
-function Field({ name, label, placeholder, defaultValue }) {
+function Field({ name, label, placeholder, defaultValue, readOnly }) {
   return (
     <label className="block">
       <span className="block text-[11px] font-mono uppercase tracking-wider text-muted-foreground">{label}</span>
-      <input name={name} defaultValue={defaultValue} placeholder={placeholder}
-        className="mt-1 w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm font-mono focus:border-primary focus:outline-none" />
+      <input name={name} defaultValue={defaultValue} placeholder={placeholder} readOnly={readOnly}
+        className={`mt-1 w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm font-mono focus:outline-none ${readOnly ? "cursor-not-allowed opacity-60 select-none" : "focus:border-primary"}`} />
     </label>
   );
 }
@@ -135,6 +135,7 @@ function ManageClientModal({ client, onClose }) {
   const [err, setErr] = useState(null);
   const [addUser, setAddUser] = useState(false);
   const [addKey, setAddKey] = useState(false);
+  const [metaSaved, setMetaSaved] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -233,6 +234,22 @@ function ManageClientModal({ client, onClose }) {
     }
   };
 
+  const handleUpdateClient = async (e) => {
+    e.preventDefault();
+    setErr(null);
+    const fd = new FormData(e.currentTarget);
+    try {
+      await clientAPI.updateClient(client.id, {
+        name: String(fd.get("name")),
+        website: String(fd.get("website")),
+      });
+      setMetaSaved(true);
+      setTimeout(() => setMetaSaved(false), 1500);
+    } catch (error) {
+      setErr(error.message || "Failed to update client metadata");
+    }
+  };
+
   return (
     <Modal title={`⚙️ Manage: ${client.name}`} size="lg" onClose={onClose}>
       {err && <p className="mb-4 text-xs text-destructive">{err}</p>}
@@ -243,11 +260,15 @@ function ManageClientModal({ client, onClose }) {
         <div className="space-y-6">
           <div>
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Metadata</h3>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <form onSubmit={handleUpdateClient} className="grid gap-3 sm:grid-cols-2">
               <Field name="name" label="Name" defaultValue={client.name} />
-              <Field name="slug" label="Slug" defaultValue={client.slug} />
+              <Field name="slug" label="Slug (read-only)" defaultValue={client.slug} readOnly />
               <Field name="website" label="Website" defaultValue={client.website} />
-            </div>
+              <div className="flex items-end gap-2">
+                <button type="submit" className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">💾 Save Metadata</button>
+                {metaSaved && <span className="text-xs text-[var(--color-success)]">✓ Saved</span>}
+              </div>
+            </form>
             <p className="mt-2 text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
               ↳ PUT /api/admin/clients/:clientId
             </p>
