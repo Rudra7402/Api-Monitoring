@@ -181,8 +181,9 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/hit", ingestRouter);
 app.use("/api/analytics", analyticsRouter);
-app.use("/api", clientRouter);
 app.use("/api/dlq", dlqRouter);
+app.use("/api", clientRouter);
+
 
 /**
  * -------------------------
